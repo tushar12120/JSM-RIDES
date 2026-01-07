@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSM ADMIN</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="bg-overlay" style="background: #000;"></div>
+
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <i class='bx bxs-shield-alt-2'></i> JSM ADMIN
+            </div>
+            <button id="btn-admin-logout" class="icon-btn"><i class='bx bx-power-off'></i></button>
+        </header>
+
+        <!-- Admin Dashboard -->
+        <div class="glass-panel" style="margin: 100px auto; max-width: 500px; padding: 30px;">
+            <h2 style="color:var(--gold); margin-bottom: 20px;">Register New Driver</h2>
+
+            <div class="form-box" style="width:100%">
+                <div class="input-field">
+                    <i class='bx bx-user'></i>
+                    <input type="text" id="d-name" placeholder="Driver Name" />
+                </div>
+                <div class="input-field">
+                    <i class='bx bx-envelope'></i>
+                    <input type="email" id="d-email" placeholder="Driver Email" />
+                </div>
+                <div class="input-field">
+                    <i class='bx bx-lock'></i>
+                    <input type="password" id="d-password" placeholder="Set Password" />
+                </div>
+
+                <div style="display:flex; gap:10px; margin-bottom: 15px;">
+                    <div class="input-field" style="flex:1;">
+                        <i class='bx bxs-taxi'></i>
+                        <select id="d-vehicle-type"
+                            style="background:transparent; border:none; color:#fff; width:100%; outline:none;" disabled>
+                            <option value="bike" style="color:#000" selected>Bike Only</option>
+                        </select>
+                    </div>
+                    <div class="input-field" style="flex:1;">
+                        <input type="text" id="d-vehicle-model" placeholder="Model (e.g. Splendor)" />
+                    </div>
+                </div>
+
+                <div class="input-field">
+                    <i class='bx bxs-card'></i>
+                    <input type="text" id="d-vehicle-no" placeholder="Vehicle No (RJ 15 XX 1234)" />
+                </div>
+
+                <div class="alert-box"
+                    style="background: rgba(0, 255, 136, 0.1); padding: 10px; border-radius: 5px; margin-bottom: 10px; font-size: 0.8rem; color: #00ff88;">
+                    <i class='bx bx-check-circle'></i> Note: Admin session remains active after registration.
+                </div>
+
+                <button id="btn-create-driver" class="cta-btn">Register Driver</button>
+            </div>
+        </div>
+
+        <div id="toast-container"></div>
+    </div>
+    <script type="module" src="/src/admin.js"></script>
+</body>
+
+</html>

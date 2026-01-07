@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSM DRIVER - Partner App</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./style.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+    <style>
+        /* Driver Specific Overrides */
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .requests-container {
+            /* Remove old container styles */
+            margin: 0;
+            padding: 0;
+            max-width: none;
+        }
+
+        /* Bottom Sheet Style Panels */
+        .bottom-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #1a1a1a;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .request-card {
+            background: transparent;
+            border: none;
+            backdrop-filter: none;
+            animation: none;
+            margin-bottom: 0;
+            padding: 10px 0;
+        }
+
+        .driver-stats {
+            position: absolute;
+            top: 80px;
+            width: 90%;
+            left: 5%;
+            z-index: 900;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Map Background -->
+        <div id="map"></div>
+        <div class="bg-overlay" style="background:transparent; pointer-events:none;"></div>
+
+        <!-- Header -->
+        <header class="app-header" style="z-index:1001;">
+            <div class="brand">
+                <i class='bx bxs-car-garage'></i> JSM DRIVER
+            </div>
+            <div id="driver-status" class="hidden" style="text-align:right;">
+                <span style="color:#00ff88; font-size:0.9rem;">● Online</span>
+                <div id="my-loc-text" style="color:#aaa; font-size:0.7rem; margin-top:2px;">Locating...</div>
+            </div>
+        </header>
+
+        <!-- Driver Login (Centered Overlay) -->
+        <div id="driver-login" class="glass-panel"
+            style="margin: 100px auto; max-width: 400px; position:relative; z-index:2000;">
+            <!-- Login Content Preserved -->
+            <div class="form-box">
+                <h2>Partner Login</h2>
+                <div class="input-field">
+                    <i class='bx bx-envelope'></i>
+                    <input type="email" id="d-email" placeholder="Driver Email" />
+                </div>
+                <div class="input-field">
+                    <i class='bx bx-lock-alt'></i>
+                    <input type="password" id="d-password" placeholder="Password" />
+                </div>
+                <button id="btn-driver-login" class="cta-btn">Go Online</button>
+            </div>
+        </div>
+
+        <!-- Dashboard UI (Bottom Sheets) -->
+        <div id="driver-dashboard" class="hidden">
+            <!-- Stats (Floating Top) -->
+            <div class="driver-stats">
+                <div class="stat-box" style="backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1);">
+                    <div class="stat-val">₹ 1200</div>
+                    <div class="stat-lbl">Today's Earnings</div>
+                </div>
+            </div>
+
+            <!-- VIEW 1: Searching (Bottom Bar) -->
+            <div id="view-searching" class="bottom-panel">
+                <h3 style="color:#fff; margin-bottom:15px; text-align:center;">
+                    <i class='bx bx-radar bx-flashing'></i> Finding Rides...
+                </h3>
+                <div id="requests-list"></div>
+            </div>
+
+            <!-- VIEW 2: Going to Pickup -->
+            <div id="view-pickup" class="bottom-panel hidden">
+                <div class="request-card" style="border-left: 4px solid #00ff88; padding-left:15px;">
+                    <h3><i class='bx bx-navigation'></i> Go to Pickup</h3>
+                    <p style="color:#aaa; font-size:0.9rem;">Navigating to Customer...</p>
+                    <div style="margin:20px 0;">
+                        <input type="number" id="otp-input" placeholder="OTP"
+                            style="padding:15px; width:100%; border-radius:10px; border:none; text-align:center; font-size:2rem; letter-spacing:10px; font-weight:bold;" />
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button id="btn-nav-google" class="cta-btn secondary" style="flex:1;"><i
+                                class='bx bxl-google'></i> Map</button>
+                        <button id="btn-start-ride" class="cta-btn" style="flex:2;">Start Ride</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 3: In Ride -->
+            <div id="view-in-ride" class="bottom-panel hidden">
+                <div class="request-card" style="border-left: 4px solid var(--gold); padding-left:15px;">
+                    <h3><i class='bx bxs-direction-right'></i> Ride In Progress</h3>
+                    <p style="color:#aaa;">Dropping Customer...</p>
+                    <br>
+                    <button id="btn-complete-ride" class="cta-btn">Reached Drop Location</button>
+                </div>
+            </div>
+
+            <!-- VIEW 4: Collect Cash -->
+            <div id="view-payment" class="bottom-panel hidden">
+                <div class="request-card">
+                    <h3><i class='bx bx-rupee'></i> Collect Cash</h3>
+                    <div style="font-size: 3rem; color: #00ff88; font-weight: 700; margin: 20px 0;">
+                        ₹<span id="pay-amount">0</span>
+                    </div>
+                    <button id="btn-confirm-pay" class="cta-btn">Payment Received</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="toast-container"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script type="module" src="/src/driver.js"></script>
+</body>
+
+</html>

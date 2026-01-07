@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSM RIDES - Premium</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Background Video/Image -->
+        <div class="bg-overlay"></div>
+
+        <!-- Map Container -->
+        <div id="map"></div>
+
+        <!-- UI Container -->
+        <div class="ui-layer">
+
+            <!-- Header -->
+            <header class="app-header">
+                <div class="brand">
+                    <i class='bx bxs-taxi'></i> JSM RIDES
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button id="btn-locate" class="icon-btn"><i class='bx bx-current-location'></i></button>
+                    <button id="btn-logout" class="icon-btn hidden"><i class='bx bx-power-off'></i></button>
+                </div>
+            </header>
+
+            <!-- Auth -->
+            <div id="auth-container" class="glass-panel">
+                <div class="form-box" id="login-form">
+                    <h2>Welcome Back</h2>
+                    <p>Login to continue your journey</p>
+                    <div class="input-field">
+                        <i class='bx bx-envelope'></i>
+                        <input type="email" id="login-email" placeholder="Email Address" />
+                    </div>
+                    <div class="input-field">
+                        <i class='bx bx-lock-alt'></i>
+                        <input type="password" id="login-password" placeholder="Password" />
+                    </div>
+                    <button id="btn-login" class="cta-btn">Login</button>
+                    <p class="switch-text">New here? <span id="link-to-register">Create Account</span></p>
+                </div>
+
+                <div class="form-box hidden" id="register-form">
+                    <h2>Join JSM RIDES</h2>
+                    <p>Explore Jaisalmer with ease</p>
+                    <div class="input-field">
+                        <i class='bx bx-user'></i>
+                        <input type="text" id="reg-name" placeholder="Full Name" />
+                    </div>
+                    <div class="input-field">
+                        <i class='bx bx-envelope'></i>
+                        <input type="email" id="reg-email" placeholder="Email Address" />
+                    </div>
+                    <div class="input-field">
+                        <i class='bx bx-lock-alt'></i>
+                        <input type="password" id="reg-password" placeholder="Password" />
+                    </div>
+                    <button id="btn-register" class="cta-btn">Register</button>
+                    <p class="switch-text">Already a member? <span id="link-to-login">Login</span></p>
+                </div>
+
+                <!-- Driver Link -->
+                <div
+                    style="text-align:center; margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+                    <a href="driver.html" target="_blank"
+                        style="color:var(--gold); text-decoration:none; font-size:0.9rem;">
+                        <i class='bx bxs-car-garage'></i> Drive with JSM? <b>Partner Login</b>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Booking Panel -->
+            <div id="booking-container" class="glass-panel bottom-panel hidden">
+                <div class="drag-handle"></div>
+
+                <div class="location-box">
+                    <div class="loc-row">
+                        <i class='bx bxs-circle' style="color: var(--gold);"></i>
+                        <input type="text" id="pickup-input" placeholder="Set Pickup Location on Map" readonly>
+                    </div>
+                    <div class="connector-line"></div>
+                    <div class="loc-row">
+                        <i class='bx bxs-map' style="color: var(--accent);"></i>
+                        <input type="text" id="drop-input" placeholder="Set Drop Location on Map" readonly>
+                    </div>
+                </div>
+
+                <div id="vehicle-selection" class="hidden">
+                    <h3>Select Ride</h3>
+                    <p id="ride-info"
+                        style="color: #FFD700; text-align: center; margin-bottom: 10px; font-size: 0.9rem;">
+                        Distance: <span id="ride-distance">--</span> km
+                    </p>
+                    <div class="vehicle-grid" style="grid-template-columns: 1fr; max-width: 200px; margin: 0 auto;">
+                        <div class="vehicle-card selected" data-type="bike">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3097/3097033.png" alt="Bike">
+                            <div class="v-info">
+                                <span class="v-name">Bike</span>
+                                <span class="v-time">2 min</span>
+                            </div>
+                            <span class="v-price">₹<span id="price-bike">--</span></span>
+                        </div>
+                    </div>
+                    <button id="btn-book-ride" class="cta-btn primary">Book Ride</button>
+                    <button id="btn-reset-booking"
+                        style="margin-top:10px; background:transparent; border:1px solid #444; color:#888;"
+                        class="cta-btn">Cancel / Reset</button>
+                </div>
+
+                <!-- Step 3: Ride Status (Driver & Payment) -->
+                <div id="ride-status-panel" class="hidden">
+                    <div class="status-header">
+                        <div class="pulsing-dot"></div>
+                        <h3 id="status-text">Driver Arriving...</h3>
+                        <span id="ride-otp">OTP: 4589</span>
+                    </div>
+                    <div class="driver-info">
+                        <div class="driver-img">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="driver">
+                        </div>
+                        <div class="driver-details">
+                            <h3 id="driver-name">Searching...</h3> <!-- Dynamic -->
+                            <p id="driver-car">Bike • finding...</p> <!-- Dynamic -->
+                            <div class="rating" id="driver-rating">⭐ 4.9 (580 rides)</div>
+                        </div>
+                        <div class="driver-actions">
+                            <button class="call-btn"><i class='bx bxs-phone'></i></button>
+                            <div class="otp-display">OTP: <span id="otp-val">----</span></div>
+                        </div>
+                    </div>
+                    <div class="payment-info">
+                        <h3>Payment Method</h3>
+                        <div class="payment-row">
+                            <span><i class='bx bx-money'></i> Cash Payment</span>
+                            <span id="payment-amount">₹36</span>
+                        </div>
+                        <p style="font-size:0.8rem; color:#666; margin-top:5px;">Please pay cash to driver after ride.
+                        </p>
+
+                        <div class="payment-summary"
+                            style="margin-top:20px; border-top:1px solid #eee; padding-top:10px;">
+                            <div class="payment-row total">
+                                <span>Total To Pay</span>
+                                <span id="total-pay">₹36</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btn-cancel-ride" class="btn-secondary">Cancel Ride</button>
+                </div>
+            </div>
+
+            <!-- Toast Container -->
+            <div id="toast-container"></div>
+        </div>
+        <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "jsm-rides",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12"
+  }
+}

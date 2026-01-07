@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSM DRIVER - Partner App</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        /* Driver Specific Overrides */
+        .requests-container {
+            margin-top: 80px; 
+            padding: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .request-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease;
+        }
+        .req-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .req-price { font-size: 1.5rem; color: var(--gold); font-weight: 700; }
+        .req-type { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; color: #aaa; }
+        .req-route { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .req-point { display: flex; gap: 10px; align-items: center; color: #ddd; }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="bg-overlay"></div>
+
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <i class='bx bxs-car-garage'></i> JSM DRIVER
+            </div>
+            <div id="driver-status" class="hidden">
+                <span style="color:#00ff88; font-size:0.9rem;">● Online</span>
+            </div>
+        </header>
+
+        <!-- Driver Login -->
+        <div id="driver-login" class="glass-panel" style="margin: 100px auto; max-width: 400px;">
+            <div class="form-box">
+                <h2>Partner Login</h2>
+                <p>Start earning with JSM Rides</p>
+                <div class="input-field">
+                    <i class='bx bx-user'></i>
+                    <input type="text" id="d-name" placeholder="Your Name" />
+                </div>
+                <div class="input-field">
+                    <i class='bx bxs-taxi'></i>
+                    <select id="d-vehicle" style="background:transparent; border:none; color:#fff; width:100%; outline:none;">
+                        <option value="bike" style="color:#000">Bike</option>
+                        <option value="auto" style="color:#000">Auto</option>
+                        <option value="car" style="color:#000">Car</option>
+                    </select>
+                </div>
+                <button id="btn-driver-login" class="cta-btn">Go Online</button>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="driver-dashboard" class="requests-container hidden">
+            <h3 style="color:#fff; margin-bottom:15px; text-align:center;">
+                <i class='bx bx-radar'></i> Looking for Rides...
+            </h3>
+            <div id="requests-list">
+                <!-- Cards will be injected here -->
+            </div>
+        </div>
+
+        <div id="toast-container"></div>
+    </div>
+    <script type="module" src="./js/main.js"></script>
+</body>
+</html>
