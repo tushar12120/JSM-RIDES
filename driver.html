@@ -146,32 +146,40 @@
             <div id="view-in-ride" class="bottom-panel hidden">
                 <div class="request-card" style="border-left: 4px solid var(--gold); padding-left:15px;">
                     <h3><i class='bx bxs-direction-right'></i> Ride In Progress</h3>
-                    <p style="color:#aaa;">Dropping Customer...</p>
-                    <br>
-                    <button id="btn-complete-ride" class="cta-btn">Reached Drop Location</button>
-                </div>
-            </div>
-
-            <!-- VIEW 4: Collect Cash -->
-            <div id="view-payment" class="bottom-panel hidden">
-                <div class="request-card">
-                    <h3><i class='bx bx-rupee'></i> Collect Cash</h3>
-                    <div style="font-size: 3rem; color: #00ff88; font-weight: 700; margin: 20px 0;">
-                        ₹<span id="pay-amount">0</span>
+                    <!-- View: Ride In Progress -->
+                    <div id="view-in-ride" class="bottom-panel hidden">
+                        <h2>Ride in Progress</h2>
+                        <p>Heading to Drop Location...</p>
+                        <div class="action-buttons">
+                            <!-- Navigate Button -->
+                            <button class="btn-secondary"
+                                onclick="openGoogleMaps(currentRide.drop_lat, currentRide.drop_lng)">
+                                <i class='bx bxs-map'></i> Navigate (Google Maps)
+                            </button>
+                            <button id="btn-complete-ride" class="btn-primary">Complete Ride</button>
+                        </div>
                     </div>
-                    <button id="btn-confirm-pay" class="cta-btn">Payment Received</button>
+
+                    <!-- VIEW 4: Collect Cash -->
+                    <div id="view-payment" class="bottom-panel hidden">
+                        <div class="request-card">
+                            <h3><i class='bx bx-rupee'></i> Collect Cash</h3>
+                            <div style="font-size: 3rem; color: #00ff88; font-weight: 700; margin: 20px 0;">
+                                ₹<span id="pay-amount">0</span>
+                            </div>
+                            <button id="btn-confirm-pay" class="cta-btn">Payment Received</button>
+                        </div>
+                    </div>
+
                 </div>
+
+                <div id="toast-container"></div>
             </div>
 
-        </div>
-
-        <div id="toast-container"></div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-    <script type="module" src="/src/driver.js"></script>
+            <!-- Scripts -->
+            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+            <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+            <script type="module" src="/src/driver.js"></script>
 </body>
 
 </html>

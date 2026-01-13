@@ -8,10 +8,24 @@ let driverLat = 26.9157, driverLng = 70.9083; // Default
 
 // Map Init
 function initMap() {
-    map = L.map('map', { zoomControl: false }).setView([driverLat, driverLng], 15);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '©OpenStreetMap, ©CartoDB'
+
+    // Initialize Map (SATELLITE VIEW)
+    map = L.map('map').setView([26.9124, 70.9002], 13);
+
+    // Esri World Imagery (Satellite)
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     }).addTo(map);
+
+    // Also add labels (Hybrid) if possible, or stick to Satellite only.
+    // For "Colourfull", Satellite is best.
+
+    // Function to Open Google Maps
+    window.openGoogleMaps = function (lat, lng) {
+        if (!lat || !lng) return;
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=two_wheeler`, '_blank');
+    }
+
 
     // Custom Icon
     const carIcon = L.icon({
